@@ -6,17 +6,15 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.playground.photofacedetection.detector.FaceDetector
 import com.playground.photofacedetection.detector.SimpleFaceDetector
-import com.playground.photofacedetection.detector.SmileyFaceDetector
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.configuration.CameraConfiguration
 import io.fotoapparat.parameter.ScaleType
 import io.fotoapparat.result.BitmapPhoto
 import io.fotoapparat.selector.auto
-import io.fotoapparat.selector.autoFlash
 import io.fotoapparat.selector.autoFocus
-import io.fotoapparat.selector.autoRedEye
 import io.fotoapparat.selector.back
 import io.fotoapparat.selector.continuousFocusPicture
 import io.fotoapparat.selector.firstAvailable
@@ -29,7 +27,6 @@ import io.fotoapparat.selector.hz60
 import io.fotoapparat.selector.manualJpegQuality
 import io.fotoapparat.selector.none
 import io.fotoapparat.selector.off
-import io.fotoapparat.selector.torch
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,8 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var disposable: Disposable
     private lateinit var foto: Fotoapparat
     private var isUsingFrontCamera = true
-//    private val detection = SimpleFaceDetector()
-    private val detection = SmileyFaceDetector()
+    private lateinit var detection: FaceDetector
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             cameraConfiguration = cameraConfiguration
         )
         requestPermissions()
+        detection = SimpleFaceDetector(resources)
     }
 
     override fun onResume() {
