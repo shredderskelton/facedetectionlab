@@ -16,11 +16,8 @@ object BoxFacesGraphic : Graphic {
     override fun draw(bitmap: Bitmap, faces: List<FirebaseVisionFace>): Bitmap {
         val canvas = Canvas(bitmap)
         faces.forEach { face ->
-            canvas.drawRect(face.boundingBox,
-                whitePaint
-            )
+            canvas.drawRect(face.boundingBox, whitePaint)
         }
         return bitmap
     }
 }
-

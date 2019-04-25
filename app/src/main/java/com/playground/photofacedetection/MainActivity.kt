@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.playground.photofacedetection.detector.SimpleFaceDetector
+import com.playground.photofacedetection.detector.SmileyFaceDetector
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.configuration.CameraConfiguration
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var disposable: Disposable
     private lateinit var foto: Fotoapparat
     private var isUsingFrontCamera = true
-    private val detection = SimpleFaceDetector()
+//    private val detection = SimpleFaceDetector()
+    private val detection = SmileyFaceDetector()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -113,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 private const val TAG = "MainActivity"
 private val cameraConfiguration = CameraConfiguration(
     pictureResolution = {
-        filter { it.width in 300..500 }.minBy { it.area } // select custom resolution from available
+        filter { it.width in 500..800 }.minBy { it.area } // select custom resolution from available
     },
     previewResolution = highestResolution(), // (optional) we want to have the highest possible preview resolution
     previewFpsRange = highestFps(),          // (optional) we want to have the best frame rate
@@ -123,9 +125,9 @@ private val cameraConfiguration = CameraConfiguration(
         fixed()                            // if even auto focus is not available - fixed focus mode will be used
     ),
     flashMode = firstAvailable(              // (optional) similar to how it is done for focus mode, this time for flash
-        autoRedEye(),
-        autoFlash(),
-        torch(),
+//        autoRedEye(),
+//        autoFlash(),
+//        torch(),
         off()
     ),
     antiBandingMode = firstAvailable(       // (optional) similar to how it is done for focus mode & flash, now for anti banding
