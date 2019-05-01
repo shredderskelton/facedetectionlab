@@ -1,7 +1,8 @@
-package com.playground.photofacedetection.graphic
+package com.playground.photofacedetection.video.frame.graphic
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Rect
 import android.renderscript.Allocation
 import android.renderscript.Element
@@ -9,16 +10,24 @@ import android.renderscript.RenderScript
 import android.renderscript.Script
 import android.renderscript.ScriptIntrinsicBlur
 import com.google.firebase.ml.vision.face.FirebaseVisionFace
-import com.playground.photofacedetection.CameraDirection
+import com.playground.photofacedetection.common.CameraDirection
+import com.playground.photofacedetection.video.GraphicOverlayView
 
-private const val BLUR_RADIUS = 25f
+private const val BLUR_RADIUS: Float = 25f
 
-class BlurGraphic(
+class FaceBlurGraphic(
+    overlayView: GraphicOverlayView,
+    private val faces: List<FirebaseVisionFace>,
     private val context: Context,
-    private val cameraDirection: CameraDirection
-) : Graphic {
-    override fun draw(bitmap: Bitmap, faces: List<FirebaseVisionFace>): Bitmap {
-        return faces.foldRight(bitmap) { face, accBitmap -> blur(accBitmap, face) }
+    private val cameraBitmap: Bitmap,
+    private val cameraDirection: CameraDirection = overlayView.cameraDirection
+) : GraphicOverlayView.Graphic(overlayView) {
+    override fun draw(canvas: Canvas) {
+        val blurredBitmap = faces.foldRight(cameraBitmap) { face, bitmap -> blur(bitmap, face) }
+        canvas.drawBitmap(
+            blurredBitmap, null,
+            Rect(0, 0, canvas.width, canvas.height), null
+        )
     }
 
     private fun blur(image: Bitmap, face: FirebaseVisionFace): Bitmap {
@@ -29,18 +38,18 @@ class BlurGraphic(
         val theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
         theIntrinsic.setRadius(BLUR_RADIUS)
         theIntrinsic.setInput(tmpIn)
-        theIntrinsic.forEach(tmpOut, createLaunchOptions(image, face))
+        theIntrinsic.forEach(tmpOut, createLaunchOptions(face))
         tmpOut.copyTo(outputBitmap)
         return outputBitmap
     }
 
-    private fun createLaunchOptions(
-        cameraBitmap: Bitmap,
-        face: FirebaseVisionFace
-    ): Script.LaunchOptions {
+    private fun createLaunchOptions(face: FirebaseVisionFace): Script.LaunchOptions {
         val limit = Rect(0, 0, cameraBitmap.width, cameraBitmap.height)
         val bounds = with(face.limitedBoundingBox(limit)) {
-            Rect(left, top, right, bottom)
+            if (cameraDirection == CameraDirection.FRONT)
+                Rect(cameraBitmap.width - right, top, cameraBitmap.width - left, bottom)
+            else
+                Rect(left, top, right, bottom)
         }
         return Script.LaunchOptions().apply {
             setX(bounds.left, bounds.right)

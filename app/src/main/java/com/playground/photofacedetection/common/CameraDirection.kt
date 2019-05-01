@@ -1,4 +1,4 @@
-package com.playground.photofacedetection
+package com.playground.photofacedetection.common
 
 import android.hardware.Camera
 

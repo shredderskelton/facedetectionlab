@@ -1,13 +1,19 @@
-package com.playground.photofacedetection
+package com.playground.photofacedetection.photo
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.playground.photofacedetection.detector.FaceDetector
-import com.playground.photofacedetection.detector.SimpleFaceDetector
+import com.playground.photofacedetection.R
+import com.playground.photofacedetection.common.CameraDirection
+import com.playground.photofacedetection.common.Effect
+import com.playground.photofacedetection.photo.detector.FaceDetector
+import com.playground.photofacedetection.photo.detector.SimpleFaceDetector
+import com.playground.photofacedetection.photo.detector.SmileyFaceDetector
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.configuration.CameraConfiguration
@@ -35,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var disposable: Disposable
     private lateinit var foto: Fotoapparat
     private var cameraDirection = CameraDirection.FRONT
-    private lateinit var detection: FaceDetector
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +53,22 @@ class MainActivity : AppCompatActivity() {
             cameraConfiguration = cameraConfiguration
         )
         requestPermissions()
-        detection = SimpleFaceDetector(this)
+    }
+
+    private val detection: FaceDetector by lazy {
+        val effect = intent?.extras?.getString(EFFECT_ARG)?.let {
+            Effect.valueOf(it)
+        } ?: Effect.BOX
+
+        when (effect) {
+            Effect.BLUR,
+            Effect.TROLL,
+            Effect.BOX -> SimpleFaceDetector(
+                this,
+                effect
+            )
+            Effect.OUTLINE -> SmileyFaceDetector()
+        }
     }
 
     override fun onResume() {
@@ -111,6 +131,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val RxPermissions.hasCameraPermissions get() = isGranted(Manifest.permission.CAMERA)
+
+    companion object {
+        private const val EFFECT_ARG = "EFFECT_PHOTO"
+        fun start(context: Context, effect: Effect) =
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                putExtra(EFFECT_ARG, effect.name)
+            })
+    }
 }
 
 private const val TAG = "MainActivity"

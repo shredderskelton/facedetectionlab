@@ -1,4 +1,4 @@
-package com.playground.photofacedetection.detector
+package com.playground.photofacedetection.photo.detector
 
 import android.graphics.Bitmap
 import android.util.Log
@@ -8,8 +8,8 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions.FAST
-import com.playground.photofacedetection.CameraDirection
-import com.playground.photofacedetection.graphic.SmileyFaceGraphic
+import com.playground.photofacedetection.common.CameraDirection
+import com.playground.photofacedetection.photo.graphic.SmileyFaceGraphic
 
 class SmileyFaceDetector : FaceDetector {
     private val options =
@@ -28,7 +28,8 @@ class SmileyFaceDetector : FaceDetector {
         val fireImage = FirebaseVisionImage.fromBitmap(bitmap)
         detector.detectInImage(fireImage)
             .addOnSuccessListener { faces ->
-                val bitmapWithFaces = SmileyFaceGraphic().draw(bitmap, faces)
+                val bitmapWithFaces = SmileyFaceGraphic()
+                    .draw(bitmap, faces)
                 callback(bitmapWithFaces)
             }
             .addOnFailureListener { e -> Log.e(TAG, "$e") }

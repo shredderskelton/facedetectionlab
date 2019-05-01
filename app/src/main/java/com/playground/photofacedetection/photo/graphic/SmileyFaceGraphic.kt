@@ -1,4 +1,4 @@
-package com.playground.photofacedetection.graphic
+package com.playground.photofacedetection.photo.graphic
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

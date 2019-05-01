@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/photoBoxButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Photo Box" />
+
+    <Button
+        android:id="@+id/photoContourButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Photo Contours" />
+
+    <Button
+        android:id="@+id/photoBlurButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Photo Blur" />
+
+    <Button
+        android:id="@+id/photoTrollButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Photo Troll" />
+
+    <Button
+        android:id="@+id/videoBoxButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Box" />
+
+    <Button
+        android:id="@+id/videoContourButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Contours" />
+
+    <Button
+        android:id="@+id/videoBlurButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Blur" />
+
+    <Button
+        android:id="@+id/videoTrollButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Troll" />
+ 
+</LinearLayout>
