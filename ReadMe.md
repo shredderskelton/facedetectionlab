@@ -8,7 +8,12 @@ This is a simple camera app. Permissions taken care of cleanly, take a photo and
 
 ### Step 2. Simple Photo Face Detection setup
 
-Here we add the minimum code required to take a photo using a brilliant little library https://github.com/RedApparat/Fotoapparat, process it and display an image with boxes around the faces.
+Here we add the minimum code required to take a photo using a couple of brilliant little libraries:
+
+- https://github.com/RedApparat/Fotoapparat
+- https://github.com/tbruyelle/RxPermissions
+
+We take a photo, process it and display an image with boxes around the faces.
 
 ### Step 3. Playing with the Face Data
 
