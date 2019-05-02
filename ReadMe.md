@@ -8,12 +8,11 @@ This is a simple camera app. Permissions taken care of cleanly, take a photo and
 
 ### Step 2. Simple Photo Face Detection setup
 
-Here we add the minimum code required to take a photo using a couple of brilliant little libraries:
+![Some test faces](https://github.com/shredderskelton/facedetectionlab/blob/master/humans.jpg)
 
-- https://github.com/RedApparat/Fotoapparat
-- https://github.com/tbruyelle/RxPermissions
+![Outline](https://github.com/shredderskelton/facedetectionlab/blob/master/boxes.png)
 
-We take a photo, process it and display an image with boxes around the faces.
+Here we add the minimum code required to take a photo using a brilliant little library https://github.com/RedApparat/Fotoapparat, process it and display an image with boxes around the faces.
 
 ### Step 3. Playing with the Face Data
 
@@ -21,13 +20,19 @@ In this Step, we play around with the data and have a look at some of the possib
 
 #### Face Contour Outline
 
+![Contour](https://github.com/shredderskelton/facedetectionlab/blob/master/contour.png)
+
 Adding a slightly harder level of complexity, we need to get some more detail from our face detector and draw over the image with some slightly more complex arithmetic.
  
 #### Face Replacement
 
+![Troll](https://github.com/shredderskelton/facedetectionlab/blob/master/trolls.png)
+
 Replacing the face with a graphic.
 
 #### Face Altering
+
+![Blur](https://github.com/shredderskelton/facedetectionlab/blob/master/blur.png)
 
 Until now we have been _overlaying_ either graphics or bitmaps. But what about actually altering the bitmap itself? Blurring is an example of alteration, so is colour replacement or almost any kind of image processing such as altering saturation or exposure...  
 
