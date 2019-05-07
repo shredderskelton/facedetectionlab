@@ -1,5 +1,7 @@
 # Real-time Face Detection with Firebase Vision ML Kit on Android
 
+[![What we're going to build](https://github.com/shredderskelton/facedetectionlab/blob/master/video.png)](https://youtu.be/h6MmxqKlWUI)
+
 There are several branches labeled as `Step*` to follow to get a more shallow introduction to the world of face detection.
 
 ### Step 1. Scaffolding
