@@ -3,21 +3,22 @@ package com.playground.photofacedetection.video
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.hardware.Camera
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.playground.photofacedetection.R
-import com.playground.photofacedetection.video.frame.processor.FaceAlteringProcessor
-import com.playground.photofacedetection.video.frame.processor.FaceContourOverlayDetectionProcessor
-import com.playground.photofacedetection.video.frame.processor.FaceFastOverlayDetectionProcessor
-import com.playground.photofacedetection.video.frame.processor.VisionImageProcessor
 import com.playground.photofacedetection.common.CameraDirection
 import com.playground.photofacedetection.common.Effect
+import com.playground.photofacedetection.video.frame.processor.*
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_realtime.*
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 class RealTimeActivity : AppCompatActivity() {
@@ -29,6 +30,14 @@ class RealTimeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_realtime)
         rxPermissions = RxPermissions(this)
         requestPermissions()
+        cameraSourcePreviewView.setOnClickListener {
+            startSaving()
+        }
+    }
+
+    private fun startSaving() {
+        val pro = processor
+        if (pro is PhotoProducer) pro.activated = !pro.activated
     }
 
     override fun onResume() {
@@ -78,8 +87,27 @@ class RealTimeActivity : AppCompatActivity() {
         when (effect) {
             Effect.BLUR -> FaceAlteringProcessor(this)
             Effect.TROLL -> FaceFastOverlayDetectionProcessor(this, effect)
-            Effect.BOX -> FaceFastOverlayDetectionProcessor(this, effect)
+            Effect.BOX -> FaceSaveDetectionProcessor(this, watcher)
             Effect.OUTLINE -> FaceContourOverlayDetectionProcessor(effect)
+        }
+    }
+
+    private val availableToast: Toast by lazy {
+        Toast.makeText(this, "Start snapping!", Toast.LENGTH_LONG)
+    }
+
+    private val unavailableToast: Toast by lazy {
+        Toast.makeText(this, "No faces or too many faces detected!", Toast.LENGTH_LONG)
+    }
+
+    private object watcher:DetectionWatcher{
+
+        override fun onDetectionAvailabilityChanged(available: Boolean) {
+            println("Save availability $available")
+        }
+
+        override fun onFaceDetected() {
+            println("Face detected")
         }
     }
 
@@ -117,4 +145,3 @@ class RealTimeActivity : AppCompatActivity() {
 }
 
 private const val TAG = "RealTimeActivity"
-
